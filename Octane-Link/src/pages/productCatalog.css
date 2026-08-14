@@ -1,0 +1,28 @@
+.product-catalog {
+  background-color: var(--backgroundColor);
+  color: var(--text);
+}
+
+.catalog-header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.catalog-header h1 {
+  margin: 0 0 10px;
+  font-size: 36px;
+}
+
+.catalog-header p {
+  margin: 0;
+  color: #666;
+  font-size: 17px;
+}
+
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 25px;
+  max-width: 1200px;
+  margin: 0 auto;
+}

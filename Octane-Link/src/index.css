@@ -1,4 +1,4 @@
-:root {
+/*:root {
   --text: #6b6375;
   --text-h: #08060d;
   --bg: #fff;
@@ -108,4 +108,21 @@ code {
   line-height: 135%;
   padding: 4px 8px;
   background: var(--code-bg);
+}*/
+:root {
+  --backgroundColor: #0b1a1e;
+  --primaryColor: #102a30;
+  --seconderyColor: #ff9152;
+  --text: #ffffff;
+  --textDim: #9fb6b8;
+  --borderColor: #ff7a29;
+
+  --font-family: Arial, sans-serif;
+
+  --radius-small: ...;
+  --radius-medium: ...;
+  --radius-large: ...;
+}
+body {
+  mergin: 0;
 }
