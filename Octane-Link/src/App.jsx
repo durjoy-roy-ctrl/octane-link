@@ -1,153 +1,144 @@
-/*import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import heroImg from './assets/hero.png'
-import './App.css'
+// <<<<<<< HEAD
+// /*import { useState } from 'react'
+// import reactLogo from './assets/react.svg'
+// import viteLogo from './assets/vite.svg'
+// import heroImg from './assets/hero.png'
+// import './App.css'
+// =======
+// import { useState } from 'react'
+// import { Routes, Route } from 'react-router-dom'
+// import Navbar from './components/Navbar.jsx'
+// import Footer from './components/Footer.jsx'
+// import Signup from './pages/Signup.jsx'
+// import Login from './pages/Login.jsx'
+// import Delivery from './pages/Delivery.jsx'
+// import DeliveryTracking from './pages/DeliveryTracking.jsx'
+// import DeliverySchedule from './pages/DeliverySchedule.jsx'
+// >>>>>>> origin/main
 
-function App() {
-  const [count, setCount] = useState(0)
+// function App() {
+//   const [user, setUser] = useState(null)
 
-  return (
-    <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
-        </div>
-        <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.jsx</code> and save to test <code>HMR</code>
-          </p>
-        </div>
-        <button
-          type="button"
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
-      </section>
+//   function login(name, email) {
+//     const loggedInUser = { name, email }
+//     setUser(loggedInUser)
+//     console.log('User:', name)
+//     console.log('Email:', email)
+//   }
 
-      <div className="ticks"></div>
+//    return (
+//     <div className="page">
+//       <Navbar user={user} cartCount={0} />
 
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
+//       <Routes>
+//         <Route path="/signup" element={<Signup login={login} />} />
+//         <Route path="/login" element={<Login login={login} />} />
 
-      <div className="ticks"></div>
-      <section id="spacer"></section>
-    </>
-  )
-}
+//         {/* Delivery system */}
+//         <Route path="/delivery" element={<Delivery />} />
+//         <Route path="/delivery/track" element={<DeliveryTracking />} />
+//         <Route path="/delivery/schedule" element={<DeliverySchedule />} />
+//       </Routes>
 
-export default App*/
+//       <Footer />
+//     </div>
+//   )
+// }
 
-/*import "./App.css";
-import ProductCatalog from "./pages/ProductCatalog";
-function App() {
-  return <ProductCatalog />;
-}
-export default App;*/
+// <<<<<<< HEAD
+// export default App*/
 
+// /*import "./App.css";
+// import ProductCatalog from "./pages/ProductCatalog";
+// function App() {
+//   return <ProductCatalog />;
+// }
+// export default App;*/
+
+// import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+// import Navbar from "./components/Navbar";
+// import Footer from "./components/Footer";
+// import ProductCatalog from "./pages/productCatalog";
+// import ProductDetails from "./pages/productDetails";
+// // import Signup from "./pages/Signup";
+
+// function App() {
+//   return (
+//     <BrowserRouter>
+//       <Navbar />
+
+//       <Routes>
+//         <Route path="/" element={<Navigate to="/catalog" replace />} />
+//         <Route path="/catalog" element={<ProductCatalog />} />
+//         <Route path="/product/:id" element={<ProductDetails />}
+// />
+//       </Routes>
+
+//       <Footer />
+//     </BrowserRouter>
+//   );
+// }
+
+// export default App;
+// =======
+// export default App
+// >>>>>>> origin/main
+import { useState } from "react";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
+
 import ProductCatalog from "./pages/productCatalog";
 import ProductDetails from "./pages/productDetails";
-// import Signup from "./pages/Signup";
+
+import Signup from "./pages/Signup";
+import Login from "./pages/Login";
+import Delivery from "./pages/Delivery";
+import DeliveryTracking from "./pages/DeliveryTracking";
+import DeliverySchedule from "./pages/DeliverySchedule";
 
 function App() {
+  const [user, setUser] = useState(null);
+
+  function login(name, email) {
+    const loggedInUser = { name, email };
+    setUser(loggedInUser);
+
+    console.log("User:", name);
+    console.log("Email:", email);
+  }
+
   return (
     <BrowserRouter>
-      <Navbar />
+      <div className="page">
+        <Navbar user={user} cartCount={0} />
 
-      <Routes>
-        <Route path="/" element={<Navigate to="/catalog" replace />} />
-        <Route path="/catalog" element={<ProductCatalog />} />
-        <Route path="/product/:id" element={<ProductDetails />}
-/>
-      </Routes>
+        <Routes>
+          <Route path="/" element={<Navigate to="/catalog" replace />} />
 
-      <Footer />
+          {/* Product catalog */}
+          <Route path="/catalog" element={<ProductCatalog />} />
+          <Route path="/product/:id" element={<ProductDetails />} />
+
+          {/* Authentication */}
+          <Route path="/signup" element={<Signup login={login} />} />
+          <Route path="/login" element={<Login login={login} />} />
+
+          {/* Delivery system */}
+          <Route path="/delivery" element={<Delivery />} />
+          <Route
+            path="/delivery/track"
+            element={<DeliveryTracking />}
+          />
+          <Route
+            path="/delivery/schedule"
+            element={<DeliverySchedule />}
+          />
+        </Routes>
+
+        <Footer />
+      </div>
     </BrowserRouter>
   );
 }
