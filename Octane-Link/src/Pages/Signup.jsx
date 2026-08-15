@@ -20,7 +20,7 @@ export default function Signup({login}){
    function handleSubmit(e) {
     e.preventDefault()
     login(form.name, form.email)
-    navigate('/verify', { state: { phone: form.phone } })
+    navigate('/login')
   }
 
   return(
