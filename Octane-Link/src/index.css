@@ -10,9 +10,9 @@
   --text-dim: #9fb6b8;
   --green: #4ade80;
 
-  /* Shared theme aliases */
+  /* for Amdad's part */
   --backgroundColor: var(--ink);
-  --primaryColor: var(--panel);
+  --primaryColor: var(--panel-hi);
   --seconderyColor: var(--accent-hi);
   --textDim: var(--text-dim);
   --borderColor: var(--accent);

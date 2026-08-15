@@ -1,3 +1,8 @@
+import shellHelix from "../assets/images/products/shell-helix-hx8.jpg";
+import mobil1 from "../assets/images/products/mobil-1-fs.jpg";
+import castrolEdge from "../assets/images/products/castrol-edge.jpg";
+import motul8100 from "../assets/images/products/motul-8100.jpg";
+
 const products = [
   {
     id: 1,
@@ -7,7 +12,7 @@ const products = [
     compatibility: ["Toyota", "Honda", "Nissan"],
     price: 4500,
     stock: 12,
-    image: "/products/shell-helix-hx8.jpg",
+    image: shellHelix,
   },
   {
     id: 2,
@@ -17,7 +22,7 @@ const products = [
     compatibility: ["Toyota", "BMW", "Mercedes-Benz"],
     price: 5200,
     stock: 8,
-    image: "/products/mobil-1-fs.jpg",
+    image: mobil1,
   },
   {
     id: 3,
@@ -27,7 +32,7 @@ const products = [
     compatibility: ["Honda", "Toyota", "Ford"],
     price: 4800,
     stock: 15,
-    image: "/products/castrol-edge.jpg",
+    image: castrolEdge,
   },
   {
     id: 4,
@@ -37,7 +42,7 @@ const products = [
     compatibility: ["BMW", "Mercedes-Benz", "Audi"],
     price: 5600,
     stock: 6,
-    image: "/products/motul-8100.jpg",
+    image: motul8100,
   },
 ];
 

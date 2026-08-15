@@ -1,10 +1,16 @@
-import "./ProductCard.css";
+
+import "./productCard.css";
+import { Link } from "react-router-dom";
 
 function ProductCard({ product }) {
   return (
     <div className="product-card">
       <div className="product-image-container">
-        <img src={product.image} alt={product.name} className="product-image" />
+        <img
+          src={product.image}
+          alt={product.name}
+          className="product-image"
+        />
       </div>
 
       <div className="product-card-content">
@@ -15,9 +21,15 @@ function ProductCard({ product }) {
         <p className="product-price">৳{product.price}</p>
 
         <div className="product-card-buttons">
-          <button className="details-button">Product Details</button>
+          
+          <Link to={`/product/${product.id}`}
+          className="details-button">
+            Product Details
+          </Link>
 
-          <button className="cart-button">Add to Cart</button>
+          <button className="cart-button">
+            Add to Cart
+          </button>
         </div>
       </div>
     </div>

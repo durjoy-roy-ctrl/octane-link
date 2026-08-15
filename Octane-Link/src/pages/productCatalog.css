@@ -1,8 +1,8 @@
 .product-catalog {
+  min-height: 100vh;
+  padding: 40px;
   background-color: var(--backgroundColor);
-  color: var(--text);
 }
-
 .catalog-header {
   text-align: center;
   margin-bottom: 40px;

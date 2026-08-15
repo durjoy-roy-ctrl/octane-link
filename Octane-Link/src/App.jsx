@@ -121,9 +121,35 @@ function App() {
 
 export default App*/
 
-import "./App.css";
+/*import "./App.css";
 import ProductCatalog from "./pages/ProductCatalog";
 function App() {
   return <ProductCatalog />;
 }
+export default App;*/
+
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import Navbar from "./components/Navbar";
+import Footer from "./components/Footer";
+import ProductCatalog from "./pages/productCatalog";
+import ProductDetails from "./pages/productDetails";
+// import Signup from "./pages/Signup";
+
+function App() {
+  return (
+    <BrowserRouter>
+      <Navbar />
+
+      <Routes>
+        <Route path="/" element={<Navigate to="/catalog" replace />} />
+        <Route path="/catalog" element={<ProductCatalog />} />
+        <Route path="/product/:id" element={<ProductDetails />}
+/>
+      </Routes>
+
+      <Footer />
+    </BrowserRouter>
+  );
+}
+
 export default App;
