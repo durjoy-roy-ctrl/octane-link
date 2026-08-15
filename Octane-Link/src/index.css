@@ -11,6 +11,29 @@
   --green: #4ade80;
 }
 
+* { box-sizing: border-box; }
+
+html, body, #root {
+  margin: 0;
+  min-height: 100%;
+}
+
+body {
+  background: var(--ink);
+  color: var(--text);
+  font-family: 'Inter', system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, .display {
+  font-family: 'Big Shoulders Display', sans-serif;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  line-height: 0.95;
+  margin: 0;
+}
+
 
 /* ---------- Navbar ---------- */
 .navbar {
@@ -135,3 +158,9 @@
 
 .btn-block { width: 100%; justify-content: center; }
 .btn-sm { padding: 7px 14px; font-size: 13px; }
+
+
+
+/* ---------- Footer ---------- */
+.footer { margin-top: auto; border-top: 1px solid var(--line); padding: 28px 0; color: var(--text-dim); font-size: 13px; }
+.footer-inner { display: flex; justify-content: space-between; width: 100%; }
