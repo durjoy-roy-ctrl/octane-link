@@ -84,7 +84,7 @@
 // export default App
 // >>>>>>> origin/main
 import { useState } from "react";
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
@@ -92,6 +92,7 @@ import Footer from "./components/Footer";
 import ProductCatalog from "./pages/productCatalog";
 import ProductDetails from "./pages/productDetails";
 
+import Home from "./Pages/home";
 import Signup from "./pages/Signup";
 import Login from "./pages/Login";
 import Delivery from "./pages/Delivery";
@@ -115,7 +116,8 @@ function App() {
         <Navbar user={user} cartCount={0} />
 
         <Routes>
-          <Route path="/" element={<Navigate to="/catalog" replace />} />
+          
+          <Route path="/" element={<Home/>}/>
 
           {/* Product catalog */}
           <Route path="/catalog" element={<ProductCatalog />} />
