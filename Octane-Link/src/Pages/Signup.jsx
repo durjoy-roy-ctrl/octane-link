@@ -51,7 +51,7 @@ export default function Signup({login}){
             </div>
             <div className="field">
               <label htmlFor="role">I am a</label>
-              <select id="role" name="role" value={form.role} onChange={handleChange}>
+              <select id="role" name="role" value={form.role}  onChange={handleChange}>
                 {roles.map((r) => (
                   <option key={r.value} value={r.value}>{r.label}</option>
                 ))}
