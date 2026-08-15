@@ -4,6 +4,9 @@ import Navbar from './components/Navbar.jsx'
 import Footer from './components/Footer.jsx'
 import Signup from './pages/Signup.jsx'
 import Login from './pages/Login.jsx'
+import Delivery from './pages/Delivery.jsx'
+import DeliveryTracking from './pages/DeliveryTracking.jsx'
+import DeliverySchedule from './pages/DeliverySchedule.jsx'
 
 function App() {
   const [user, setUser] = useState(null)
@@ -22,6 +25,11 @@ function App() {
       <Routes>
         <Route path="/signup" element={<Signup login={login} />} />
         <Route path="/login" element={<Login login={login} />} />
+
+        {/* Delivery system */}
+        <Route path="/delivery" element={<Delivery />} />
+        <Route path="/delivery/track" element={<DeliveryTracking />} />
+        <Route path="/delivery/schedule" element={<DeliverySchedule />} />
       </Routes>
 
       <Footer />
