@@ -27,9 +27,10 @@ function ProductCard({ product }) {
             Product Details
           </Link>
 
-          <button className="cart-button">
+          <Link to={`/cart`} 
+          className="cart-button">
             Add to Cart
-          </button>
+          </Link>
         </div>
       </div>
     </div>
