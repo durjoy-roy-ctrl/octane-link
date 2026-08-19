@@ -26,3 +26,132 @@
   max-width: 1200px;
   margin: 0 auto;
 }
+
+.vehicle-filter {
+  max-width: 1200px;
+  margin: 0 auto 40px;
+
+  padding: 28px;
+
+  background-color: var(--primaryColor);
+
+  border: 2px solid var(--line);
+  border-radius: var(--radius-medium);
+}
+
+.vehicle-filter-header {
+  margin-bottom: 22px;
+}
+
+.filter-label {
+  margin: 0 0 8px;
+
+  color: var(--accent);
+
+  font-size: 12px;
+  font-weight: 700;
+
+  letter-spacing: 2px;
+}
+
+.vehicle-filter-header h2 {
+  margin: 0 0 8px;
+
+  color: var(--text);
+
+  font-size: 30px;
+}
+
+.vehicle-filter-header > div > p:last-child {
+  margin: 0;
+
+  color: var(--textDim);
+
+  font-size: 14px;
+}
+
+/* ---------- SELECT CONTROL ---------- */
+
+.vehicle-filter-control {
+  display: flex;
+
+  align-items: center;
+
+  gap: 14px;
+
+  padding: 14px 16px;
+
+  background-color: var(--panel-hi);
+
+  border: 1px solid var(--accent);
+  border-radius: var(--radius-medium);
+}
+
+.vehicle-icon {
+  width: 42px;
+  height: 42px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  background-color: var(--panel-hi);
+
+  border-radius: var(--radius-small);
+
+  font-size: 20px;
+}
+
+.vehicle-select-wrapper {
+  flex: 1;
+}
+
+.vehicle-select-wrapper label {
+  display: block;
+
+  margin-bottom: 4px;
+
+  color: var(--textDim);
+
+  font-size: 11px;
+  font-weight: 700;
+
+  letter-spacing: 1px;
+}
+
+.vehicle-select-wrapper select {
+  width: 100%;
+
+  padding: 4px 0;
+
+  background-color: transparent;
+
+  border: none;
+  outline: none;
+
+  color: var(--text);
+
+  font-family: inherit;
+  font-size: 16px;
+  font-weight: 600;
+
+  cursor: pointer;
+}
+
+.vehicle-select-wrapper select option {
+  background-color: var(--panel);
+  color: var(--text);
+}
+
+.filter-result {
+  margin: 18px 0 0;
+
+  color: var(--textDim);
+
+  font-size: 13px;
+}
+
+.filter-result strong {
+  color: var(--accent-hi);
+}
