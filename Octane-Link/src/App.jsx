@@ -1,25 +1,26 @@
-
 import { useEffect, useState } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
-
 import SplashScreen from "./components/splashScreen";
 
-import ProductCatalog from "./pages/productCatalog";
-import ProductDetails from "./pages/productDetails";
+import ProductCatalog from "./Pages/productCatalog";
+import ProductDetails from "./Pages/productDetails";
 
 import Home from "./Pages/home";
-import Signup from "./pages/Signup";
-import Login from "./pages/Login";
-import Delivery from "./pages/Delivery";
-import DeliveryTracking from "./pages/DeliveryTracking";
-import DeliverySchedule from "./pages/DeliverySchedule";
+import Signup from "./Pages/Signup";
+import Login from "./Pages/Login";
+import Delivery from "./Pages/Delivery";
+import DeliveryTracking from "./Pages/DeliveryTracking";
+import DeliverySchedule from "./Pages/DeliverySchedule";
+
+import Buy from "./Pages/Buy";
+import BulkQuote from "./Pages/BulkQuote";
+import Checkout from "./Pages/Checkout";
 
 function App() {
   const [showSplash, setShowSplash] = useState(true);
-
   const [user, setUser] = useState(null);
 
   useEffect(() => {
@@ -48,12 +49,17 @@ function App() {
         <Navbar user={user} cartCount={0} />
 
         <Routes>
-          
-          <Route path="/" element={<Home/>}/>
+          <Route path="/" element={<Home />} />
 
           {/* Product catalog */}
           <Route path="/catalog" element={<ProductCatalog />} />
           <Route path="/product/:id" element={<ProductDetails />} />
+
+          {/* Fuel Purchases & Orders */}
+          <Route path="/buy" element={<Buy />} />
+          <Route path="/sell" element={<Checkout />} />
+          <Route path="/bulk-quote" element={<BulkQuote />} />
+          <Route path="/checkout" element={<Checkout />} />
 
           {/* Authentication */}
           <Route path="/signup" element={<Signup login={login} />} />
@@ -61,14 +67,8 @@ function App() {
 
           {/* Delivery system */}
           <Route path="/delivery" element={<Delivery />} />
-          <Route
-            path="/delivery/track"
-            element={<DeliveryTracking />}
-          />
-          <Route
-            path="/delivery/schedule"
-            element={<DeliverySchedule />}
-          />
+          <Route path="/delivery/track" element={<DeliveryTracking />} />
+          <Route path="/delivery/schedule" element={<DeliverySchedule />} />
         </Routes>
 
         <Footer />
