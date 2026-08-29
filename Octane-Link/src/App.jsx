@@ -10,8 +10,8 @@ import ProductCatalog from "./pages/productCatalog";
 import ProductDetails from "./pages/productDetails";
 
 import Home from "./Pages/home";
-import Signup from "./pages/Signup";
-import Login from "./pages/Login";
+import Signup from "./Pages/Signup";
+import Login from "./Pages/Login";
 import Delivery from "./pages/Delivery";
 import DeliveryTracking from "./pages/DeliveryTracking";
 import DeliverySchedule from "./pages/DeliverySchedule";
@@ -36,13 +36,15 @@ function App() {
     return () => clearTimeout(timer);
   }, []);
 
-  function login(name, email) {
-    const loggedInUser = { name, email };
-    setUser(loggedInUser);
-    localStorage.setItem('octane_user', JSON.stringify(loggedInUser));
+  // FIXED: now takes (userData, token) instead of (name, email).
+  // This matches what Signup.jsx / Login.jsx send after a successful
+  // backend call: login(data.user, data.token)
+  function login(userData, token) {
+    setUser(userData);
+    localStorage.setItem('octane_user', JSON.stringify(userData));
+    localStorage.setItem('octane_token', token);
 
-    console.log("User:", name);
-    console.log("Email:", email);
+    console.log("Logged in user:", userData);
   }
 
   function logout() {
