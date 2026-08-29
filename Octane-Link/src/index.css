@@ -570,3 +570,89 @@ select:focus-visible {
   outline: 2px solid var(--amber);
   outline-offset: 2px;
 }
+
+/* ---------- About steps ---------- */
+.about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: start; }
+.step { display: flex; gap: 16px; padding: 16px 0; border-bottom: 1px solid var(--line); }
+.step:last-child { border-bottom: none; }
+.step .num { font-family: 'Space Grotesk', monospace; color: var(--accent); font-weight: 700; font-size: 14px; }
+.step h3 { font-size: 17px; text-transform: none; letter-spacing: 0; margin-bottom: 4px; }
+.step p { color: var(--text-dim); font-size: 14px; margin: 0; line-height: 1.6; }
+
+/* ---------- Profile Page ---------- */
+.profile-card {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 32px;
+  max-width: 520px;
+  margin: 0 auto;
+}
+
+.profile-avatar-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.profile-avatar {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: var(--panel-hi);
+  border: 2px solid var(--accent);
+  color: var(--amber);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Space Grotesk', monospace;
+  font-size: 32px;
+  font-weight: 700;
+  margin-bottom: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.profile-name {
+  font-size: 24px;
+  margin-bottom: 4px;
+}
+
+.profile-email {
+  color: var(--text-dim);
+  font-size: 14px;
+}
+
+.profile-details {
+  border-top: 1px solid var(--line);
+  padding-top: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.profile-info-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.profile-info-row:last-child {
+  border-bottom: none;
+}
+
+.profile-info-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.profile-info-value {
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--text);
+}

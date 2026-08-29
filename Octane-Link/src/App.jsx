@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
@@ -16,13 +15,20 @@ import Login from "./pages/Login";
 import Delivery from "./pages/Delivery";
 import DeliveryTracking from "./pages/DeliveryTracking";
 import DeliverySchedule from "./pages/DeliverySchedule";
+import About from "./pages/About";
+import Profile from "./pages/Profile"; // <-- Profile Import kora hoyeche
 
 function App() {
   const [showSplash, setShowSplash] = useState(true);
-
   const [user, setUser] = useState(null);
 
+  // Load saved user from LocalStorage on first load
   useEffect(() => {
+    const savedUser = localStorage.getItem('octane_user');
+    if (savedUser) {
+      setUser(JSON.parse(savedUser));
+    }
+
     const timer = setTimeout(() => {
       setShowSplash(false);
     }, 2000);
@@ -33,9 +39,16 @@ function App() {
   function login(name, email) {
     const loggedInUser = { name, email };
     setUser(loggedInUser);
+    localStorage.setItem('octane_user', JSON.stringify(loggedInUser));
 
     console.log("User:", name);
     console.log("Email:", email);
+  }
+
+  function logout() {
+    setUser(null);
+    localStorage.removeItem('octane_user');
+    localStorage.removeItem('octane_token');
   }
 
   if (showSplash) {
@@ -48,8 +61,11 @@ function App() {
         <Navbar user={user} cartCount={0} />
 
         <Routes>
-          
-          <Route path="/" element={<Home/>}/>
+          <Route path="/" element={<Home />} />
+
+          {/* About & Profile Pages */}
+          <Route path="/about" element={<About />} />
+          <Route path="/profile" element={<Profile user={user} logout={logout} />} />
 
           {/* Product catalog */}
           <Route path="/catalog" element={<ProductCatalog />} />
