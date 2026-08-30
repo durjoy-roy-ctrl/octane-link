@@ -1,17 +1,39 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ProductCard from "../components/products/ProductCard";
-import products from "../data/products";
 import "./ProductCatalog.css";
 
 function ProductCatalog() {
 
   const [selectedVehicle, setSelectedVehicle] = useState("");
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+  fetch("http://localhost:5000/api/products")
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error("Failed to fetch products");
+      }
+
+      return response.json();
+    })
+    .then((data) => {
+      setProducts(data);
+      setLoading(false);
+    })
+    .catch((error) => {
+      console.error("Error fetching products:", error);
+      setError("Unable to load products.");
+      setLoading(false);
+    });
+}, []);
 
   const vehicles = [
-    ...new Set(
-      products.flatMap((product) => product.compatibility)
-    ),
-  ];
+  ...new Set(
+    products.flatMap((product) => product.compatibility || [])
+  ),
+];
 
   const filteredProducts = selectedVehicle
     ? products.filter((product) =>
@@ -19,7 +41,16 @@ function ProductCatalog() {
       )
     : products;
 
-  return (
+  if (loading) {
+  return <h2>Loading products...</h2>;
+}
+
+if (error) {
+  return <h2>{error}</h2>;
+}
+
+  
+    return (
     <div className="product-catalog">
 
       <div className="catalog-header">
@@ -93,7 +124,7 @@ function ProductCatalog() {
 
         {filteredProducts.map((product) => (
           <ProductCard
-            key={product.id}
+            key={product._id}
             product={product}
           />
         ))}
