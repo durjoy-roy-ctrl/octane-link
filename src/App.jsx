@@ -2,9 +2,9 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 
 
-import Buy from './pages/Buy';
-import BulkQuote from './pages/BulkQuote';
-import Checkout from './pages/Checkout';
+import Buy from './Pages/Buy';
+import BulkQuote from './Pages/BulkQuote';
+import Checkout from './Pages/Checkout';
 
 function App() {
   return (
