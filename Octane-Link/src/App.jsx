@@ -1,17 +1,18 @@
 import { useEffect, useState } from "react";
+
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
-
 import SplashScreen from "./components/splashScreen";
 
 import ProductCatalog from "./Pages/productCatalog";
 import ProductDetails from "./Pages/productDetails";
-
 import Home from "./Pages/home";
+
 import Signup from "./Pages/Signup";
 import Login from "./Pages/Login";
+
 import Delivery from "./Pages/Delivery";
 import DeliveryTracking from "./Pages/DeliveryTracking";
 import DeliverySchedule from "./Pages/DeliverySchedule";
@@ -20,11 +21,21 @@ import Buy from "./Pages/Buy";
 import BulkQuote from "./Pages/BulkQuote";
 import Checkout from "./Pages/Checkout";
 
+import About from "./Pages/About";
+import Profile from "./Pages/Profile";
+
 function App() {
   const [showSplash, setShowSplash] = useState(true);
   const [user, setUser] = useState(null);
 
+  // Load saved user from LocalStorage on first load
   useEffect(() => {
+    const savedUser = localStorage.getItem("octane_user");
+
+    if (savedUser) {
+      setUser(JSON.parse(savedUser));
+    }
+
     const timer = setTimeout(() => {
       setShowSplash(false);
     }, 2000);
@@ -32,12 +43,22 @@ function App() {
     return () => clearTimeout(timer);
   }, []);
 
-  function login(name, email) {
-    const loggedInUser = { name, email };
-    setUser(loggedInUser);
+  // Login function
+  function login(userData, token) {
+    setUser(userData);
 
-    console.log("User:", name);
-    console.log("Email:", email);
+    localStorage.setItem("octane_user", JSON.stringify(userData));
+    localStorage.setItem("octane_token", token);
+
+    console.log("Logged in user:", userData);
+  }
+
+  // Logout function
+  function logout() {
+    setUser(null);
+
+    localStorage.removeItem("octane_user");
+    localStorage.removeItem("octane_token");
   }
 
   if (showSplash) {
@@ -51,6 +72,13 @@ function App() {
 
         <Routes>
           <Route path="/" element={<Home />} />
+
+          {/* About & Profile */}
+          <Route path="/about" element={<About />} />
+          <Route
+            path="/profile"
+            element={<Profile user={user} logout={logout} />}
+          />
 
           {/* Product catalog */}
           <Route path="/catalog" element={<ProductCatalog />} />
