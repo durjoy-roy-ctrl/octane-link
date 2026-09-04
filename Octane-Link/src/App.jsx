@@ -24,9 +24,15 @@ import Checkout from "./Pages/Checkout";
 import About from "./Pages/About";
 import Profile from "./Pages/Profile";
 
+import Cart from "./Pages/cart";
+
 function App() {
   const [showSplash, setShowSplash] = useState(true);
   const [user, setUser] = useState(null);
+  const [cart, setCart] = useState([]);
+  function addToCart(product){
+    setCart([...cart,product]);
+  }
 
   // Load saved user from LocalStorage on first load
   useEffect(() => {
@@ -80,8 +86,11 @@ function App() {
             element={<Profile user={user} logout={logout} />}
           />
 
+          {/* Product Cart */}
+          <Route path="/cart" element={<Cart cart={cart}/>}/>
+
           {/* Product catalog */}
-          <Route path="/catalog" element={<ProductCatalog />} />
+          <Route path="/catalog" element={<ProductCatalog addToCart={addToCart} />} />
           <Route path="/product/:id" element={<ProductDetails />} />
 
           {/* Main fuel routes */}
