@@ -30,6 +30,7 @@ function App() {
   const [showSplash, setShowSplash] = useState(true);
   const [user, setUser] = useState(null);
   const [cart, setCart] = useState([]);
+
   function addToCart(product){
    const existingProduct = cart.find(
     (item)=> item._id === product._id
@@ -40,6 +41,28 @@ function App() {
     return;
    }
    setCart([...cart,{...product,quantity:1}]);
+  }
+
+  function removeFromCart(productId){
+    setCart(cart.filter((item)=> item._id !== productId));
+  }
+
+  function increaseQuantity(productId){
+    setCart(
+      cart.map((item)=>
+      item._id === productId?
+    {...item,quantity:item.quantity+1} : item
+      )
+    );
+  }
+
+  function decreaseQuantity(productId){
+    setCart(
+      cart.map((item)=>
+      item._id === productId?
+      {...item,quantity:item.quantity-1}:item
+      )
+    );
   }
 
   // Load saved user from LocalStorage on first load
@@ -95,7 +118,12 @@ function App() {
           />
 
           {/* Product Cart */}
-          <Route path="/cart" element={<Cart cart={cart}/>}/>
+          <Route path="/cart" 
+          element={<Cart cart={cart} 
+          removeFromCart={removeFromCart} 
+          increaseQuantity={increaseQuantity}
+          decreaseQuantity={decreaseQuantity}/>}
+          />
 
           {/* Product catalog */}
           <Route path="/catalog" element={<ProductCatalog addToCart={addToCart} />} />

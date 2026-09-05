@@ -1,0 +1,23 @@
+.cart-page{
+    padding: 40px;
+}
+
+.cart-page h1{
+    margin-bottom: 30px;
+}
+
+.cart-item{
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding: 20px;
+    margin-bottom: 15px;
+    border: 1px solid #ff7a29;
+    border-radius: 10px;
+}
+
+.cart-item-image{
+    width: 100px;
+    height: 100px
+    object-fit:;
+}
