@@ -31,7 +31,15 @@ function App() {
   const [user, setUser] = useState(null);
   const [cart, setCart] = useState([]);
   function addToCart(product){
-    setCart([...cart,product]);
+   const existingProduct = cart.find(
+    (item)=> item._id === product._id
+   );
+   if(existingProduct){
+    existingProduct.quantity +=1;
+    setCart([...cart]);
+    return;
+   }
+   setCart([...cart,{...product,quantity:1}]);
   }
 
   // Load saved user from LocalStorage on first load
@@ -74,7 +82,7 @@ function App() {
   return (
     <BrowserRouter>
       <div className="page">
-        <Navbar user={user} cartCount={0} />
+        <Navbar user={user} cartCount={cart.reduce((total,item)=>total+item.quantity,0)} />
 
         <Routes>
           <Route path="/" element={<Home />} />

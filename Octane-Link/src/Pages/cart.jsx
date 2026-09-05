@@ -9,13 +9,13 @@ function Cart({cart})
             </h1>
             <div className="cart-items">
                 {cart.length == 0 && <p>Your Cart is empty.</p>}
-                {/* {cart.map((item)=>
-                (
-                    <div key={item.id}>
-                        {item.name}
+                {cart.map((product)=>(
+                    <div key={product._id}>
+                        <h3>{product.name}</h3>
+                        <p>৳{product.price}</p>
+                        <p>Quantity:{product.quantity}</p>
                     </div>
-                )
-                )} */}
+                ))}
             </div>
         </div>
     );

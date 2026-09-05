@@ -1,6 +1,6 @@
 
 import "./productCard.css";
-import { Link } from "react-router-dom";
+import { Link,useNavigate } from "react-router-dom";
 import shellHelix from "../../assets/images/products/shell-helix-hx8.jpg";
 import mobil1 from "../../assets/images/products/mobil-1-fs.jpg";
 import castrolEdge from "../../assets/images/products/castrol-edge.jpg";
@@ -11,6 +11,7 @@ import adnoc from "../../assets/images/products/Adnoc-Voyeger.jpg";
 
 
 function ProductCard({ product, addToCart}) {
+  const navigate = useNavigate();
   const imageMap = {
   "shell-helix-hx8.jpg": shellHelix,
   "/images/product/shell-helix-hx8.jpg": shellHelix,
@@ -56,7 +57,10 @@ const productImage = imageMap[product.image];
             Product Details
           </Link>
 
-          <button classname="cart-button" onClick={()=>addToCart(product)}>
+          <button className="cart-button" 
+          onClick={()=>
+          {addToCart(product); 
+          navigate("/cart");}}>
             Add to Cart
           </button>
         </div>
