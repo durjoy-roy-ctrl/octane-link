@@ -1,30 +1,74 @@
 import { useEffect, useState } from "react";
+
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
-
 import SplashScreen from "./components/splashScreen";
 
-import ProductCatalog from "./pages/productCatalog";
-import ProductDetails from "./pages/productDetails";
-
+import ProductCatalog from "./Pages/productCatalog";
+import ProductDetails from "./Pages/productDetails";
 import Home from "./Pages/home";
+
 import Signup from "./Pages/Signup";
 import Login from "./Pages/Login";
-import Delivery from "./pages/Delivery";
-import DeliveryTracking from "./pages/DeliveryTracking";
-import DeliverySchedule from "./pages/DeliverySchedule";
-import About from "./pages/About";
-import Profile from "./pages/Profile"; // <-- Profile Import kora hoyeche
+
+import Delivery from "./Pages/Delivery";
+import DeliveryTracking from "./Pages/DeliveryTracking";
+import DeliverySchedule from "./Pages/DeliverySchedule";
+
+import Buy from "./Pages/Buy";
+import BulkQuote from "./Pages/BulkQuote";
+import Checkout from "./Pages/Checkout";
+
+import About from "./Pages/About";
+import Profile from "./Pages/Profile";
+
+import Cart from "./Pages/cart";
 
 function App() {
   const [showSplash, setShowSplash] = useState(true);
   const [user, setUser] = useState(null);
+  const [cart, setCart] = useState([]);
+
+  function addToCart(product){
+   const existingProduct = cart.find(
+    (item)=> item._id === product._id
+   );
+   if(existingProduct){
+    existingProduct.quantity +=1;
+    setCart([...cart]);
+    return;
+   }
+   setCart([...cart,{...product,quantity:1}]);
+  }
+
+  function removeFromCart(productId){
+    setCart(cart.filter((item)=> item._id !== productId));
+  }
+
+  function increaseQuantity(productId){
+    setCart(
+      cart.map((item)=>
+      item._id === productId?
+    {...item,quantity:item.quantity+1} : item
+      )
+    );
+  }
+
+  function decreaseQuantity(productId){
+    setCart(
+      cart.map((item)=>
+      item._id === productId && item.quantity>1?
+      {...item,quantity:item.quantity-1}:item
+      )
+    );
+  }
 
   // Load saved user from LocalStorage on first load
   useEffect(() => {
-    const savedUser = localStorage.getItem('octane_user');
+    const savedUser = localStorage.getItem("octane_user");
+
     if (savedUser) {
       setUser(JSON.parse(savedUser));
     }
@@ -36,21 +80,22 @@ function App() {
     return () => clearTimeout(timer);
   }, []);
 
-  // FIXED: now takes (userData, token) instead of (name, email).
-  // This matches what Signup.jsx / Login.jsx send after a successful
-  // backend call: login(data.user, data.token)
+  // Login function
   function login(userData, token) {
     setUser(userData);
-    localStorage.setItem('octane_user', JSON.stringify(userData));
-    localStorage.setItem('octane_token', token);
+
+    localStorage.setItem("octane_user", JSON.stringify(userData));
+    localStorage.setItem("octane_token", token);
 
     console.log("Logged in user:", userData);
   }
 
+  // Logout function
   function logout() {
     setUser(null);
-    localStorage.removeItem('octane_user');
-    localStorage.removeItem('octane_token');
+
+    localStorage.removeItem("octane_user");
+    localStorage.removeItem("octane_token");
   }
 
   if (showSplash) {
@@ -60,18 +105,35 @@ function App() {
   return (
     <BrowserRouter>
       <div className="page">
-        <Navbar user={user} cartCount={0} />
+        <Navbar user={user} cartCount={cart.reduce((total,item)=>total+item.quantity,0)} />
 
         <Routes>
           <Route path="/" element={<Home />} />
 
-          {/* About & Profile Pages */}
+          {/* About & Profile */}
           <Route path="/about" element={<About />} />
-          <Route path="/profile" element={<Profile user={user} logout={logout} />} />
+          <Route
+            path="/profile"
+            element={<Profile user={user} logout={logout} />}
+          />
+
+          {/* Product Cart */}
+          <Route path="/cart" 
+          element={<Cart cart={cart} 
+          removeFromCart={removeFromCart} 
+          increaseQuantity={increaseQuantity}
+          decreaseQuantity={decreaseQuantity}/>}
+          />
 
           {/* Product catalog */}
-          <Route path="/catalog" element={<ProductCatalog />} />
+          <Route path="/catalog" element={<ProductCatalog addToCart={addToCart} />} />
           <Route path="/product/:id" element={<ProductDetails />} />
+
+          {/* Main fuel routes */}
+          <Route path="/buy" element={<Buy />} />
+          <Route path="/sell" element={<Checkout />} />
+          <Route path="/bulk-quote" element={<BulkQuote />} />
+          <Route path="/checkout" element={<Checkout />} />
 
           {/* Authentication */}
           <Route path="/signup" element={<Signup login={login} />} />
@@ -79,14 +141,8 @@ function App() {
 
           {/* Delivery system */}
           <Route path="/delivery" element={<Delivery />} />
-          <Route
-            path="/delivery/track"
-            element={<DeliveryTracking />}
-          />
-          <Route
-            path="/delivery/schedule"
-            element={<DeliverySchedule />}
-          />
+          <Route path="/delivery/track" element={<DeliveryTracking />} />
+          <Route path="/delivery/schedule" element={<DeliverySchedule />} />
         </Routes>
 
         <Footer />
