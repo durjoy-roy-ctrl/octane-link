@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import Navbar from "./components/Navbar";
@@ -12,6 +11,8 @@ import Home from "./Pages/home";
 
 import Signup from "./Pages/Signup";
 import Login from "./Pages/Login";
+import ForgotPassword from "./Pages/ForgotPassword";
+import ResetPassword from "./Pages/ResetPassword"; 
 
 import Delivery from "./Pages/Delivery";
 import DeliveryTracking from "./Pages/DeliveryTracking";
@@ -31,41 +32,47 @@ function App() {
   const [user, setUser] = useState(null);
   const [cart, setCart] = useState([]);
 
-  function addToCart(product){
-   const existingProduct = cart.find(
-    (item)=> item._id === product._id
-   );
-   if(existingProduct){
-    existingProduct.quantity +=1;
-    setCart([...cart]);
-    return;
-   }
-   setCart([...cart,{...product,quantity:1}]);
+  function addToCart(product) {
+    const existingProduct = cart.find(
+      (item) => item._id === product._id
+    );
+    if (existingProduct) {
+      setCart(
+        cart.map((item) =>
+          item._id === product._id
+            ? { ...item, quantity: item.quantity + 1 }
+            : item
+        )
+      );
+      return;
+    }
+    setCart([...cart, { ...product, quantity: 1 }]);
   }
 
-  function removeFromCart(productId){
-    setCart(cart.filter((item)=> item._id !== productId));
+  function removeFromCart(productId) {
+    setCart(cart.filter((item) => item._id !== productId));
   }
 
-  function increaseQuantity(productId){
+  function increaseQuantity(productId) {
     setCart(
-      cart.map((item)=>
-      item._id === productId?
-    {...item,quantity:item.quantity+1} : item
+      cart.map((item) =>
+        item._id === productId
+          ? { ...item, quantity: item.quantity + 1 }
+          : item
       )
     );
   }
 
-  function decreaseQuantity(productId){
+  function decreaseQuantity(productId) {
     setCart(
-      cart.map((item)=>
-      item._id === productId && item.quantity>1?
-      {...item,quantity:item.quantity-1}:item
+      cart.map((item) =>
+        item._id === productId && item.quantity > 1
+          ? { ...item, quantity: item.quantity - 1 }
+          : item
       )
     );
   }
 
-  // Load saved user from LocalStorage on first load
   useEffect(() => {
     const savedUser = localStorage.getItem("octane_user");
 
@@ -80,7 +87,6 @@ function App() {
     return () => clearTimeout(timer);
   }, []);
 
-  // Login function
   function login(userData, token) {
     setUser(userData);
 
@@ -90,7 +96,6 @@ function App() {
     console.log("Logged in user:", userData);
   }
 
-  // Logout function
   function logout() {
     setUser(null);
 
@@ -105,7 +110,10 @@ function App() {
   return (
     <BrowserRouter>
       <div className="page">
-        <Navbar user={user} cartCount={cart.reduce((total,item)=>total+item.quantity,0)} />
+        <Navbar
+          user={user}
+          cartCount={cart.reduce((total, item) => total + item.quantity, 0)}
+        />
 
         <Routes>
           <Route path="/" element={<Home />} />
@@ -118,15 +126,23 @@ function App() {
           />
 
           {/* Product Cart */}
-          <Route path="/cart" 
-          element={<Cart cart={cart} 
-          removeFromCart={removeFromCart} 
-          increaseQuantity={increaseQuantity}
-          decreaseQuantity={decreaseQuantity}/>}
+          <Route
+            path="/cart"
+            element={
+              <Cart
+                cart={cart}
+                removeFromCart={removeFromCart}
+                increaseQuantity={increaseQuantity}
+                decreaseQuantity={decreaseQuantity}
+              />
+            }
           />
 
           {/* Product catalog */}
-          <Route path="/catalog" element={<ProductCatalog addToCart={addToCart} />} />
+          <Route
+            path="/catalog"
+            element={<ProductCatalog addToCart={addToCart} />}
+          />
           <Route path="/product/:id" element={<ProductDetails />} />
 
           {/* Main fuel routes */}
@@ -136,8 +152,10 @@ function App() {
           <Route path="/checkout" element={<Checkout />} />
 
           {/* Authentication */}
-          <Route path="/signup" element={<Signup login={login} />} />
-          <Route path="/login" element={<Login login={login} />} />
+          <Route path="/signup" element={<Signup login={login} user={user} />} />
+          <Route path="/login" element={<Login login={login} user={user} />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
+          <Route path="/reset-password/:token" element={<ResetPassword />} /> {/* ← নতুন রাউট */}
 
           {/* Delivery system */}
           <Route path="/delivery" element={<Delivery />} />

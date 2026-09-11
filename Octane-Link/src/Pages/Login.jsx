@@ -1,15 +1,17 @@
 import { useState } from 'react'
-import { useNavigate, Link } from 'react-router-dom'
-
+import { useNavigate, Link, Navigate } from 'react-router-dom'
 
 const API_BASE_URL = 'http://localhost:5000/api'
 
-export default function Login({ login }) {
+export default function Login({ login, user }) {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
   const navigate = useNavigate()
+  if (user) {
+    return <Navigate to="/" replace />
+  }
 
   async function handleSubmit(e) {
     e.preventDefault()

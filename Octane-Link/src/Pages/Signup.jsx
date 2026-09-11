@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { useNavigate, Link } from "react-router-dom"
+import { useNavigate, Link, Navigate } from "react-router-dom"
 
 const API_BASE_URL = 'http://localhost:5000/api'
 
@@ -9,11 +9,15 @@ const roles = [
     { value: 'delivery', label: 'Delivery Agent' },
 ]
 
-export default function Signup({ login }) {
+export default function Signup({ login, user }) {
     const [form, setForm] = useState({ name: '', email: '', phone: '', password: '', role: 'retail' })
     const [error, setError] = useState('')
     const [loading, setLoading] = useState(false)
     const navigate = useNavigate()
+
+    if (user) {
+        return <Navigate to="/" replace />
+    }
 
     function handleChange(e) {
         const { name, value } = e.target
@@ -42,7 +46,6 @@ export default function Signup({ login }) {
             login(data.user, data.token)
             navigate('/')
         } catch (err) {
-          
             console.error('Signup request failed:', err)
             setError('Could not reach the server. Is the backend running?')
             setLoading(false)
