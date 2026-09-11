@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import ProductCard from "../components/products/ProductCard";
 import "./ProductCatalog.css";
 
-function ProductCatalog({addToCart}) {
+function ProductCatalog({addToCart,user}) {
 
   const [selectedVehicle, setSelectedVehicle] = useState("");
   const [products, setProducts] = useState([]);
@@ -127,6 +127,7 @@ if (error) {
             key={product._id}
             product={product}
             addToCart={addToCart}
+            user={user}
           />
         ))}
 

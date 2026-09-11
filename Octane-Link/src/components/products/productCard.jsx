@@ -10,7 +10,7 @@ import adnoc from "../../assets/images/products/Adnoc-Voyeger.jpg";
 
 
 
-function ProductCard({ product, addToCart}) {
+function ProductCard({ product, addToCart, user}) {
   const navigate = useNavigate();
   const imageMap = {
   "shell-helix-hx8.jpg": shellHelix,
@@ -59,7 +59,12 @@ const productImage = imageMap[product.image];
 
           <button className="cart-button" 
           onClick={()=>
-          {addToCart(product); 
+          {
+            if(!user){
+              navigate("/login");
+              return;
+            }
+            addToCart(product); 
           navigate("/cart");}}>
             Add to Cart
           </button>
