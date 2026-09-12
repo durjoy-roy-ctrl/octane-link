@@ -538,10 +538,10 @@ a {
 /* ---------- Enhanced Footer ---------- */
 
 .footer {
-  margin-top: auto;
+  margin-top: 400px;
   background: var(--panel);
   border-top: 1px solid var(--line);
-  padding: 60px 0 30px; /* হাইট বাড়ানোর জন্য প্যাডিং বাড়ানো হয়েছে */
+  padding: 60px 0 30px; 
   color: var(--text-dim);
   font-size: 13px;
 }

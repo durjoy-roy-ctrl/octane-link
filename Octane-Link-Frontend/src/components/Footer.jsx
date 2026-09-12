@@ -4,11 +4,7 @@ export default function Footer() {
   return (
     <footer className="footer">
       <div className="container">
-        
-        {/* Main Footer Content */}
         <div className="footer-grid">
-          
-          {/* Brand Info */}
           <div className="footer-col brand-col">
             <Link to="/" className="brand">
               OCTANE<span className="dot">LINK</span>
@@ -17,8 +13,6 @@ export default function Footer() {
               An end-to-end digital fuel management &amp; delivery platform built for modern logistical efficiency.
             </p>
           </div>
-
-          {/* Quick Links */}
           <div className="footer-col">
             <h4 className="footer-heading">Quick Links</h4>
             <ul className="footer-links">
@@ -28,8 +22,6 @@ export default function Footer() {
               <li><Link to="/delivery">Delivery</Link></li>
             </ul>
           </div>
-
-          {/* Services */}
           <div className="footer-col">
             <h4 className="footer-heading">Services</h4>
             <ul className="footer-links">
@@ -39,8 +31,6 @@ export default function Footer() {
               <li><Link to="/delivery/track">Track Order</Link></li>
             </ul>
           </div>
-
-          {/* Developer Credits */}
           <div className="footer-col">
             <h4 className="footer-heading">Developers</h4>
             <div className="dev-list">
@@ -58,10 +48,7 @@ export default function Footer() {
               </div>
             </div>
           </div>
-
         </div>
-
-        {/* Original Footer Bottom Bar */}
         <div className="footer-inner">
           <span>© {new Date().getFullYear()} OctaneLink</span>
           <div style={{ display: 'flex', gap: 16, alignItems: 'center' }}>
