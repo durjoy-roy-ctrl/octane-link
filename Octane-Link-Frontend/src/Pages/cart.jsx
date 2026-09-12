@@ -1,4 +1,5 @@
 import "./cart.css"
+import { useNavigate } from 'react-router-dom'
 
 
 function Cart({cart,removeFromCart,increaseQuantity,decreaseQuantity})
@@ -8,6 +9,7 @@ function Cart({cart,removeFromCart,increaseQuantity,decreaseQuantity})
             total + product.price*product.quantity,
         0
     );
+    const navigate = useNavigate();
     return (
         <div className="cart-page">
             <h1>
@@ -44,6 +46,12 @@ function Cart({cart,removeFromCart,increaseQuantity,decreaseQuantity})
                     Total: ৳{totalPrice} 
                 </h2>
             </div>
+            <button
+            onClick={() => navigate('/sell')}
+            className="sell-fuel-button"
+            >
+            CHECKOUT
+            </button>
         </div>
     );
 }
