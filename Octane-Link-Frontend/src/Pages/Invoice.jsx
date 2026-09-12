@@ -5,10 +5,10 @@ export default function Invoice() {
     const location = useLocation();
     const navigate = useNavigate();
 
-    // Checkout পেজ থেকে পাঠানো ডাটা অথবা localStorage থেকে ডাটা নেওয়া
+    
     const orderData = location.state?.order || location.state || JSON.parse(localStorage.getItem('latestOrder') || 'null');
 
-    // যদি কোনো ডাটা না পাওয়া যায়
+   
     if (!orderData) {
         return (
             <div style={{ color: '#fff', textAlign: 'center', padding: '60px 20px' }}>
@@ -89,7 +89,9 @@ export default function Invoice() {
                     </thead>
                     <tbody>
                         <tr style={{ borderBottom: '1px solid #333' }}>
-                            <td style={{ padding: '12px 10px', fontSize: '14px' }}>Fuel Retail Order</td>
+                            <td style={{ padding: '12px 10px', fontSize: '14px', fontWeight: '500' }}>
+                                {orderData.productName || 'Fuel Retail Order'}
+                            </td>
                             <td style={{ padding: '12px 10px', textAlign: 'right', fontSize: '14px' }}>৳ {orderData.amount ? orderData.amount.toLocaleString() : '0'}</td>
                         </tr>
                         <tr>

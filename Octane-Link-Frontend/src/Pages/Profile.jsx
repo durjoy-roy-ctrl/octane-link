@@ -8,8 +8,16 @@ export default function Profile({ user, logout }) {
   }
 
   function handleLogout() {
-    logout()
-    navigate('/')
+    // Clear all stored order and invoice session data to protect privacy
+    localStorage.removeItem('latestOrder');
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
+
+    // Calls the parent logout state updater
+    logout();
+
+    // Redirect to Home page
+    navigate('/');
   }
 
   return (
@@ -28,12 +36,12 @@ export default function Profile({ user, logout }) {
           {user.role && <p className="meta" style={{ marginBottom: 24 }}>Account type: <strong style={{ color: 'var(--amber)' }}>{user.role}</strong></p>}
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-            {/* My Orders ক্লিক করলে Buy Fuel পেজে নিয়ে যাবে */}
+            {/* My Orders ক্লিক করলে Buy Fuel পেজে নিয়ে যাবে */}
             <Link to="/buy" className="btn btn-ghost btn-block">My Orders</Link>
-            
-            {/* Seller Dashboard ক্লিক করলে Sell Fuel পেজে নিয়ে যাবে */}
+
+            {/* Seller Dashboard ক্লিক করলে Sell Fuel পেজে নিয়ে যাবে */}
             <Link to="/sell" className="btn btn-ghost btn-block">Seller Dashboard</Link>
-            
+
             <button onClick={handleLogout} className="btn btn-ghost btn-block">Log Out</button>
           </div>
         </div>

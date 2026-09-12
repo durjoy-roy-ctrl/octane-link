@@ -1,16 +1,21 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 export default function Checkout() {
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  
+  const selectedProduct = location.state?.product;
+
   const [paymentMethod, setPaymentMethod] = useState('bKash');
   const [customerName, setCustomerName] = useState('');
   const [address, setAddress] = useState('');
   const [phone, setPhone] = useState('');
   const [trxId, setTrxId] = useState('');
-  const [amount, setAmount] = useState('');
+  
+  const [amount, setAmount] = useState(selectedProduct ? selectedProduct.price : '');
   const [loading, setLoading] = useState(false);
-
-  const navigate = useNavigate();
 
   const handleConfirm = async () => {
     if (!customerName) {
@@ -34,6 +39,7 @@ export default function Checkout() {
     }
 
     const orderPayload = {
+      productName: selectedProduct ? selectedProduct.name : 'Custom Order',
       customerName,
       paymentMethod,
       phone: phone || 'N/A',
@@ -44,7 +50,6 @@ export default function Checkout() {
 
     try {
       setLoading(true);
-
 
       const response = await fetch('http://localhost:5000/api/orders/create', {
         method: 'POST',
@@ -78,6 +83,14 @@ export default function Checkout() {
   return (
     <div style={{ padding: '30px', color: '#fff', maxWidth: '600px', margin: '0 auto' }}>
       <h2>💳 Retail Payment & Checkout</h2>
+
+      {/* Selected Product Summary Card */}
+      {selectedProduct && (
+        <div style={{ background: '#252525', padding: '15px', borderRadius: '8px', border: '1px solid #00e676', marginTop: '15px' }}>
+          <h3 style={{ margin: '0 0 5px 0', color: '#00e676' }}>{selectedProduct.icon} {selectedProduct.name}</h3>
+          <p style={{ margin: 0, color: '#aaa' }}>Category: {selectedProduct.category} | Unit: {selectedProduct.unit}</p>
+        </div>
+      )}
 
       <div style={{ background: '#1e1e1e', padding: '20px', borderRadius: '8px', border: '1px solid #333', marginTop: '20px' }}>
 
