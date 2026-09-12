@@ -1,12 +1,6 @@
 import { useParams, Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import "./productDetails.css";
-import shellHelix from "../assets/images/products/shell-helix-hx8.jpg";
-import mobil1 from "../assets/images/products/mobil-1-fs.jpg";
-import castrolEdge from "../assets/images/products/castrol-edge.jpg";
-import motul8100 from "../assets/images/products/motul-8100.jpg";
-import tempora from "../assets/images/products/Kronos-Tempora.jpg";
-import adnoc from "../assets/images/products/Adnoc-Voyeger.jpg";
 
 
 function ProductDetails() {
@@ -49,16 +43,7 @@ if (error || !product) {
   );
 }
 
-  const imageMap = {
-  "shell-helix-hx8.jpg": shellHelix,
-  "mobil-1-fs.jpg": mobil1,
-  "castrol-edge.jpg": castrolEdge,
-  "motul-8100.jpg": motul8100,
-  "Kronos-Tempora.jpg":tempora,
-  "Adnoc-Voyeger.jpg":adnoc,
-};
 
-const productImage = imageMap[product.image];
   return (
     <main className="product-details-page">
       <div className="product-details">
@@ -67,8 +52,8 @@ const productImage = imageMap[product.image];
 
         <div className="product-details-image">
           <img
-            src={productImage}
-            alt={product.name}
+          src={product.image?.url}
+          alt={product.name}
           />
         </div>
 

@@ -22,7 +22,7 @@ const userSchema = new mongoose.Schema(
     },
     role: {
       type: String,
-      enum: ['retail', 'wholesale', 'delivery'],
+      enum: ['retail', 'wholesale', 'delivery', 'admin'],
       default: 'retail',
     },
     resetToken: {

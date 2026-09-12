@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
@@ -25,6 +25,7 @@ import About from "./Pages/About";
 import Profile from "./Pages/Profile";
 
 import Cart from "./Pages/cart";
+import Admin from "./Pages/Admin";
 
 function App() {
   const [showSplash, setShowSplash] = useState(true);
@@ -207,6 +208,16 @@ try{
           removeFromCart={removeFromCart} 
           increaseQuantity={increaseQuantity}
           decreaseQuantity={decreaseQuantity}/>}
+          />
+
+          <Route
+          path="/admin"
+          element={
+          localStorage.getItem("octane_user") &&
+          JSON.parse(localStorage.getItem("octane_user")).role === "admin"
+          ? <Admin />
+          : <Navigate to="/" />
+          }
           />
 
           {/* Product catalog */}

@@ -10,6 +10,7 @@ function ProductCatalog({addToCart,user}) {
   const [error, setError] = useState("");
 
   useEffect(() => {
+    console.log("PRODUCT CATALOG LOADED");
   fetch("http://localhost:5000/api/products")
     .then((response) => {
       if (!response.ok) {
@@ -19,6 +20,7 @@ function ProductCatalog({addToCart,user}) {
       return response.json();
     })
     .then((data) => {
+      console.log("product data:",data);
       setProducts(data);
       setLoading(false);
     })
