@@ -1,3 +1,4 @@
+
 import { useState } from "react"
 import { useNavigate, Link, Navigate } from "react-router-dom"
 
@@ -16,7 +17,7 @@ export default function Signup({ login, user }) {
     const navigate = useNavigate()
 
     if (user) {
-        return <Navigate to="/" replace />
+        return <Navigate to="/profile" replace /> 
     }
 
     function handleChange(e) {
@@ -44,7 +45,7 @@ export default function Signup({ login, user }) {
                 return
             }
             login(data.user, data.token)
-            navigate('/')
+            navigate('/profile') 
         } catch (err) {
             console.error('Signup request failed:', err)
             setError('Could not reach the server. Is the backend running?')

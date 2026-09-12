@@ -1,3 +1,4 @@
+
 import { NavLink } from 'react-router-dom'
 
 const links = [
@@ -5,6 +6,7 @@ const links = [
   { to: '/catalog', label: 'Catalog' },
   { to: '/buy', label: 'Buy Fuel' },
   { to: '/sell', label: 'Sell Fuel' },
+  { to: '/invoice', label: 'Invoice' },
   { to: '/delivery', label: 'Delivery' },
   { to: '/about', label: 'How It Works' },
 ]

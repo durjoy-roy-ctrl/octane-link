@@ -1,4 +1,3 @@
-
 const express = require('express')
 const upload = require('../middleware/multer.middleware')
 const router = express.Router()
@@ -40,7 +39,4 @@ router.delete(
   deleteProduct
 )
 
-//router.put('/:id', updateProduct)
-
 module.exports = router
-
