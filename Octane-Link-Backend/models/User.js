@@ -9,7 +9,7 @@ const userSchema = new mongoose.Schema(
     email: {
       type: String,
       required: true,
-      unique: true, 
+      unique: true,
       lowercase: true,
     },
     phone: {
@@ -22,7 +22,7 @@ const userSchema = new mongoose.Schema(
     },
     role: {
       type: String,
-      enum: ['retail', 'wholesale', 'delivery'], 
+      enum: ['retail', 'wholesale', 'delivery'],
       default: 'retail',
     },
     resetToken: {
