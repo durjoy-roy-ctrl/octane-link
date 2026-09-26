@@ -216,7 +216,7 @@ function App() {
   function login(userData, token) {
     setUser(userData);
 
-    localStorage.getItem(
+    localStorage.setItem(
       "octane_user",
       JSON.stringify(userData)
     );
