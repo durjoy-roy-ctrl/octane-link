@@ -1,11 +1,18 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
-export default function Invoice() {
+export default function Invoice({ clearCart }) {
     const location = useLocation();
     const navigate = useNavigate();
 
     const orderData = location.state?.order || location.state || JSON.parse(localStorage.getItem('latestOrder') || 'null');
+
+    // Step 2: Invoice page-এ আসার পর Auto Cart Clear করা
+    useEffect(() => {
+        if (orderData && clearCart) {
+            clearCart();
+        }
+    }, []);
 
     if (!orderData) {
         return (

@@ -32,6 +32,25 @@ function App() {
   const [user, setUser] = useState(null);
   const [cart, setCart] = useState([]);
 
+  // Clear Cart function for Invoice page or Order completion
+  async function clearCart() {
+    setCart([]);
+
+    const token = localStorage.getItem("octane_token");
+    if (!token) return;
+
+    try {
+      await fetch("http://localhost:5000/api/cart", {
+        method: "DELETE",
+        headers: {
+          "Authorization": `Bearer ${token}`
+        }
+      });
+    } catch (error) {
+      console.error("Clear cart error:", error);
+    }
+  }
+
   async function addToCart(product) {
     // Local state immediate update (Fast UI update)
     setCart((prevCart) => {
@@ -274,18 +293,18 @@ function App() {
           {/* Product Cart */}
 
           <Route
-  path="/cart"
-  element={
-    localStorage.getItem("octane_user")
-      ? <Cart
-          cart={cart}
-          removeFromCart={removeFromCart}
-          increaseQuantity={increaseQuantity}
-          decreaseQuantity={decreaseQuantity}
-        />
-      : <Navigate to="/login" />
-  }
-/>
+            path="/cart"
+            element={
+              localStorage.getItem("octane_user")
+                ? <Cart
+                  cart={cart}
+                  removeFromCart={removeFromCart}
+                  increaseQuantity={increaseQuantity}
+                  decreaseQuantity={decreaseQuantity}
+                />
+                : <Navigate to="/login" />
+            }
+          />
 
           {/* Admin */}
 
@@ -327,7 +346,7 @@ function App() {
 
           <Route
             path="/sell"
-            element={<Checkout />}
+            element={<Checkout cart={cart} />}
           />
 
           <Route
@@ -337,12 +356,12 @@ function App() {
 
           <Route
             path="/checkout"
-            element={<Checkout />}
+            element={<Checkout cart={cart} clearCart={clearCart} />}
           />
 
           <Route
             path="/invoice"
-            element={<Invoice />}
+            element={<Invoice clearCart={clearCart} />}
           />
 
           {/* Authentication */}
