@@ -1,21 +1,31 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 
-export default function Checkout() {
+export default function Checkout({ cart = [] }) {
   const location = useLocation();
   const navigate = useNavigate();
 
-  
   const selectedProduct = location.state?.product;
+
+  // Cart total calculate kora
+  const cartTotal = cart.reduce((total, item) => total + (Number(item.price || 0) * Number(item.quantity || 1)), 0);
 
   const [paymentMethod, setPaymentMethod] = useState('bKash');
   const [customerName, setCustomerName] = useState('');
   const [address, setAddress] = useState('');
   const [phone, setPhone] = useState('');
   const [trxId, setTrxId] = useState('');
-  
-  const [amount, setAmount] = useState(selectedProduct ? selectedProduct.price : '');
+
+  // Amount state (Default single product price or Cart Total)
+  const [amount, setAmount] = useState(selectedProduct ? selectedProduct.price : cartTotal || '');
   const [loading, setLoading] = useState(false);
+
+  // Cart Total update hole Auto-fill hobe Amount input-e
+  useEffect(() => {
+    if (!selectedProduct && cartTotal > 0) {
+      setAmount(cartTotal);
+    }
+  }, [cartTotal, selectedProduct]);
 
   const handleConfirm = async () => {
     if (!customerName) {
@@ -39,7 +49,9 @@ export default function Checkout() {
     }
 
     const orderPayload = {
-      productName: selectedProduct ? selectedProduct.name : 'Custom Order',
+      productName: selectedProduct
+        ? selectedProduct.name
+        : (cart.length > 0 ? cart.map(item => item.name).join(', ') : 'Custom Order'),
       customerName,
       paymentMethod,
       phone: phone || 'N/A',
