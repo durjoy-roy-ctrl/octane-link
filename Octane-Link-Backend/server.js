@@ -9,11 +9,13 @@ const cartRoutes = require('./routes/cartRoutes')
 const orderRoutes = require('./routes/orderRoutes')
 const upload = require('./middleware/multer.middleware')
 const cloudinary = require('./config/cloudinary')
+const carbonTracker = require('./middleware/carbonTracker')
 
 const app = express()
 
 app.use(cors())
 app.use(express.json())
+app.use(carbonTracker)  
 
 app.use('/api/products', productRoutes)
 app.use('/api/orders', orderRoutes)

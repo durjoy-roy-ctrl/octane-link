@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import CarbonFootprintDisplay from "./CarbonFootprintDisplay";
 
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
@@ -416,6 +417,8 @@ function App() {
         </Routes>
 
         <Footer />
+
+        <CarbonFootprintDisplay />
 
       </div>
     </BrowserRouter>
