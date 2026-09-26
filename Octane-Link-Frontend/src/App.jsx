@@ -1,7 +1,5 @@
-
-
 import { useEffect, useState } from "react";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
@@ -10,7 +8,6 @@ import SplashScreen from "./components/splashScreen";
 import ProductCatalog from "./Pages/productCatalog";
 import ProductDetails from "./Pages/productDetails";
 import Home from "./Pages/home";
-
 import Signup from "./Pages/Signup";
 import Login from "./Pages/Login";
 import ForgotPassword from "./Pages/ForgotPassword";
@@ -27,87 +24,136 @@ import Invoice from "./Pages/Invoice";
 
 import About from "./Pages/About";
 import Profile from "./Pages/Profile";
-
 import Cart from "./Pages/cart";
+import Admin from "./Pages/Admin";
 
 function App() {
   const [showSplash, setShowSplash] = useState(true);
   const [user, setUser] = useState(null);
   const [cart, setCart] = useState([]);
 
-  async function addToCart(product) {
+  // Clear Cart function for Invoice page or Order completion
+  async function clearCart() {
+    setCart([]);
+
     const token = localStorage.getItem("octane_token");
-    const response = await fetch("http://localhost:5000/api/cart", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${token}`
-      },
-      body: JSON.stringify({
-        productId: product._id,
-        quantity: 1
-      })
-    });
-    const data = await response.json();
-    console.log("Cart response:", data);
-    if (!response.ok) {
-      console.error("Failed to add product to cart:", data.message);
-      return;
+    if (!token) return;
+
+    try {
+      await fetch("http://localhost:5000/api/cart", {
+        method: "DELETE",
+        headers: {
+          "Authorization": `Bearer ${token}`
+        }
+      });
+    } catch (error) {
+      console.error("Clear cart error:", error);
     }
+  }
+
+  async function addToCart(product) {
+    // Local state immediate update (Fast UI update)
     setCart((prevCart) => {
       const existing = prevCart.find((item) => item._id === product._id);
+
       if (existing) {
         return prevCart.map((item) =>
-          item._id === product._id ?
-            { ...item, quantity: item.quantity + 1 }
+          item._id === product._id
+            ? { ...item, quantity: item.quantity + 1 }
             : item
         );
       }
-      return [...prevCart, { ...product, quantity: 1 }]
+
+      return [...prevCart, { ...product, quantity: 1 }];
     });
+
+    // Backend Sync if logged in
+    const token = localStorage.getItem("octane_token");
+    if (!token) return;
+
+    try {
+      const response = await fetch("http://localhost:5000/api/cart", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`
+        },
+        body: JSON.stringify({
+          productId: product._id,
+          quantity: 1
+        })
+      });
+
+      const data = await response.json();
+      console.log("Cart response:", data);
+
+      if (!response.ok) {
+        console.error("Failed to sync cart with backend:", data.message);
+      }
+    } catch (error) {
+      console.error("Add to cart API error:", error);
+    }
   }
 
   async function removeFromCart(productId) {
+    setCart((prevCart) =>
+      prevCart.filter((item) => item._id !== productId)
+    );
+
     const token = localStorage.getItem("octane_token");
+    if (!token) return;
+
     try {
-      const response = await fetch(`http://localhost:5000/api/cart/${productId}`,
+      const response = await fetch(
+        `http://localhost:5000/api/cart/${productId}`,
         {
           method: "DELETE",
-          headers: { "Authorization": `Bearer ${token}` }
+          headers: {
+            "Authorization": `Bearer ${token}`
+          }
         }
       );
+
       if (!response.ok) {
         const data = await response.json();
         console.error("Failed to remove item:", data.message);
-        return;
       }
-      setCart((prevCart) => prevCart.filter((item) => item._id !== productId));
     } catch (error) {
       console.error("Remove from cart error:", error);
     }
   }
 
   async function updateQuantity(productId, newQuantity) {
+    setCart((prevCart) =>
+      prevCart.map((item) =>
+        item._id === productId
+          ? { ...item, quantity: newQuantity }
+          : item
+      )
+    );
+
     const token = localStorage.getItem("octane_token");
+    if (!token) return;
+
     try {
-      const response = await fetch(`http://localhost:5000/api/cart/${productId}`,
+      const response = await fetch(
+        `http://localhost:5000/api/cart/${productId}`,
         {
           method: "PATCH",
           headers: {
             "Content-Type": "application/json",
             "Authorization": `Bearer ${token}`
           },
-          body: JSON.stringify({ quantity: newQuantity })
-        });
+          body: JSON.stringify({
+            quantity: newQuantity
+          })
+        }
+      );
+
       if (!response.ok) {
         const data = await response.json();
         console.error("Failed to update quantity:", data.message);
-        return;
       }
-      setCart((prevCart) =>
-        prevCart.map((item) =>
-          item._id === productId ?
-            { ...item, quantity: newQuantity } : item));
     } catch (error) {
       console.error("Update quantity error:", error);
     }
@@ -115,13 +161,17 @@ function App() {
 
   function increaseQuantity(productId) {
     const item = cart.find((item) => item._id === productId);
+
     if (!item) return;
+
     updateQuantity(productId, item.quantity + 1);
   }
 
   function decreaseQuantity(productId) {
     const item = cart.find((item) => item._id === productId);
+
     if (!item) return;
+
     if (item.quantity - 1 <= 0) {
       removeFromCart(productId);
     } else {
@@ -129,11 +179,16 @@ function App() {
     }
   }
 
+  // Load saved user from LocalStorage on first load
   useEffect(() => {
     const savedUser = localStorage.getItem("octane_user");
 
     if (savedUser) {
-      setUser(JSON.parse(savedUser));
+      try {
+        setUser(JSON.parse(savedUser));
+      } catch (err) {
+        console.error("Error parsing saved user", err);
+      }
     }
 
     const timer = setTimeout(() => {
@@ -143,25 +198,35 @@ function App() {
     return () => clearTimeout(timer);
   }, []);
 
+  // Load user's cart from backend safely
   useEffect(() => {
     if (!user) return;
+
     const token = localStorage.getItem("octane_token");
     if (!token) return;
+
     fetch("http://localhost:5000/api/cart", {
       headers: {
         "Authorization": `Bearer ${token}`
       }
     })
-      .then(response => response.json())
-      .then(data => {
+      .then((response) => response.json())
+      .then((data) => {
         console.log("Cart from backend:", data);
-        const formattedCart = data.items.map(item => ({
-          ...item.product,
-          quantity: item.quantity
-        }));
+
+        // Safe extraction for flexible backend data formats
+        const itemsArray = data.items || (data.cart && data.cart.items) || [];
+
+        const formattedCart = itemsArray
+          .filter((item) => item && item.product)
+          .map((item) => ({
+            ...item.product,
+            quantity: item.quantity
+          }));
+
         setCart(formattedCart);
       })
-      .catch(error => {
+      .catch((error) => {
         console.error("Failed to fetch cart:", error);
       });
   }, [user]);
@@ -170,15 +235,20 @@ function App() {
   function login(userData, token) {
     setUser(userData);
 
-    localStorage.setItem("octane_user", JSON.stringify(userData));
+    localStorage.setItem(
+      "octane_user",
+      JSON.stringify(userData)
+    );
+
     localStorage.setItem("octane_token", token);
 
     console.log("Logged in user:", userData);
   }
 
+  // Logout function
   function logout() {
     setUser(null);
-
+    setCart([]);
     localStorage.removeItem("octane_user");
     localStorage.removeItem("octane_token");
   }
@@ -190,59 +260,163 @@ function App() {
   return (
     <BrowserRouter>
       <div className="page">
+
         <Navbar
           user={user}
-          cartCount={cart.reduce((total, item) => total + item.quantity, 0)}
+          cartCount={cart.reduce(
+            (total, item) => total + item.quantity,
+            0
+          )}
         />
 
         <Routes>
+
           <Route path="/" element={<Home />} />
 
           {/* About & Profile */}
-          <Route path="/about" element={<About />} />
+
           <Route
-            path="/profile"
-            element={<Profile user={user} logout={logout} />}
+            path="/about"
+            element={<About />}
           />
 
-          {/* Product Cart */}
           <Route
-            path="/cart"
+            path="/profile"
             element={
-              <Cart
-                cart={cart}
-                removeFromCart={removeFromCart}
-                increaseQuantity={increaseQuantity}
-                decreaseQuantity={decreaseQuantity}
+              <Profile
+                user={user}
+                logout={logout}
               />
             }
           />
 
+          {/* Product Cart */}
+
+          <Route
+            path="/cart"
+            element={
+              localStorage.getItem("octane_user")
+                ? <Cart
+                  cart={cart}
+                  removeFromCart={removeFromCart}
+                  increaseQuantity={increaseQuantity}
+                  decreaseQuantity={decreaseQuantity}
+                />
+                : <Navigate to="/login" />
+            }
+          />
+
+          {/* Admin */}
+
+          <Route
+            path="/admin"
+            element={
+              localStorage.getItem("octane_user") &&
+                JSON.parse(
+                  localStorage.getItem("octane_user")
+                ).role === "admin"
+                ? <Admin />
+                : <Navigate to="/" />
+            }
+          />
+
           {/* Product catalog */}
-          <Route path="/catalog"
-            element={<ProductCatalog addToCart={addToCart} user={user} />} />
-          <Route path="/product/:id" element={<ProductDetails />} />
+
+          <Route
+            path="/catalog"
+            element={
+              <ProductCatalog
+                addToCart={addToCart}
+                user={user}
+              />
+            }
+          />
+
+          <Route
+            path="/product/:id"
+            element={<ProductDetails />}
+          />
 
           {/* Main fuel routes */}
-          <Route path="/buy" element={<Buy />} />
-          <Route path="/sell" element={<Checkout />} />
-          <Route path="/bulk-quote" element={<BulkQuote />} />
-          <Route path="/checkout" element={<Checkout />} />
-          <Route path="/invoice" element={<Invoice />} /> {/* 👈 নতুন Invoice রাউট */}
+
+          <Route
+            path="/buy"
+            element={<Buy addToCart={addToCart} />}
+          />
+
+          <Route
+            path="/sell"
+            element={<Checkout cart={cart} />}
+          />
+
+          <Route
+            path="/bulk-quote"
+            element={<BulkQuote />}
+          />
+
+          <Route
+            path="/checkout"
+            element={<Checkout cart={cart} clearCart={clearCart} />}
+          />
+
+          <Route
+            path="/invoice"
+            element={<Invoice clearCart={clearCart} />}
+          />
 
           {/* Authentication */}
-          <Route path="/signup" element={<Signup login={login} user={user} />} />
-          <Route path="/login" element={<Login login={login} user={user} />} />
-          <Route path="/forgot-password" element={<ForgotPassword />} />
-          <Route path="/reset-password/:token" element={<ResetPassword />} />
+
+          <Route
+            path="/signup"
+            element={
+              <Signup
+                login={login}
+                user={user}
+              />
+            }
+          />
+
+          <Route
+            path="/login"
+            element={
+              <Login
+                login={login}
+                user={user}
+              />
+            }
+          />
+
+          <Route
+            path="/forgot-password"
+            element={<ForgotPassword />}
+          />
+
+          <Route
+            path="/reset-password/:token"
+            element={<ResetPassword />}
+          />
 
           {/* Delivery system */}
-          <Route path="/delivery" element={<Delivery />} />
-          <Route path="/delivery/track" element={<DeliveryTracking />} />
-          <Route path="/delivery/schedule" element={<DeliverySchedule />} />
+
+          <Route
+            path="/delivery"
+            element={<Delivery />}
+          />
+
+          <Route
+            path="/delivery/track"
+            element={<DeliveryTracking />}
+          />
+
+          <Route
+            path="/delivery/schedule"
+            element={<DeliverySchedule />}
+          />
+
         </Routes>
 
         <Footer />
+
       </div>
     </BrowserRouter>
   );

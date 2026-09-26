@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import ProductCard from "../components/products/ProductCard";
 import "./ProductCatalog.css";
 
-function ProductCatalog({addToCart}) {
+function ProductCatalog({addToCart,user}) {
 
   const [selectedVehicle, setSelectedVehicle] = useState("");
   const [products, setProducts] = useState([]);
@@ -10,6 +10,7 @@ function ProductCatalog({addToCart}) {
   const [error, setError] = useState("");
 
   useEffect(() => {
+    console.log("PRODUCT CATALOG LOADED");
   fetch("http://localhost:5000/api/products")
     .then((response) => {
       if (!response.ok) {
@@ -19,6 +20,7 @@ function ProductCatalog({addToCart}) {
       return response.json();
     })
     .then((data) => {
+      console.log("product data:",data);
       setProducts(data);
       setLoading(false);
     })
@@ -127,6 +129,7 @@ if (error) {
             key={product._id}
             product={product}
             addToCart={addToCart}
+            user={user}
           />
         ))}
 

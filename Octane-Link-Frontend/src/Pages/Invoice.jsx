@@ -1,14 +1,19 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
-export default function Invoice() {
+export default function Invoice({ clearCart }) {
     const location = useLocation();
     const navigate = useNavigate();
 
-    
     const orderData = location.state?.order || location.state || JSON.parse(localStorage.getItem('latestOrder') || 'null');
 
-   
+    // Step 2: Invoice page-এ আসার পর Auto Cart Clear করা
+    useEffect(() => {
+        if (orderData && clearCart) {
+            clearCart();
+        }
+    }, []);
+
     if (!orderData) {
         return (
             <div style={{ color: '#fff', textAlign: 'center', padding: '60px 20px' }}>
@@ -104,11 +109,12 @@ export default function Invoice() {
                 </table>
 
                 {/* Action Buttons */}
-                <div className="no-print" style={{ display: 'flex', gap: '12px' }}>
+                <div className="no-print" style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
                     <button
                         onClick={() => window.print()}
                         style={{
                             flex: 1,
+                            minWidth: '130px',
                             padding: '12px',
                             background: '#2196f3',
                             color: '#fff',
@@ -116,16 +122,35 @@ export default function Invoice() {
                             borderRadius: '5px',
                             cursor: 'pointer',
                             fontWeight: 'bold',
-                            fontSize: '14px'
+                            fontSize: '13px'
                         }}
                     >
                         🖨️ Print / Save PDF
                     </button>
 
                     <button
+                        onClick={() => navigate('/delivery')}
+                        style={{
+                            flex: 1,
+                            minWidth: '150px',
+                            padding: '12px',
+                            background: '#ff9800',
+                            color: '#000',
+                            border: 'none',
+                            borderRadius: '5px',
+                            cursor: 'pointer',
+                            fontWeight: 'bold',
+                            fontSize: '13px'
+                        }}
+                    >
+                        🚚 Proceed to Delivery
+                    </button>
+
+                    <button
                         onClick={() => navigate('/')}
                         style={{
                             flex: 1,
+                            minWidth: '120px',
                             padding: '12px',
                             background: '#333',
                             color: '#fff',
@@ -133,7 +158,7 @@ export default function Invoice() {
                             borderRadius: '5px',
                             cursor: 'pointer',
                             fontWeight: 'bold',
-                            fontSize: '14px'
+                            fontSize: '13px'
                         }}
                     >
                         Back to Home
