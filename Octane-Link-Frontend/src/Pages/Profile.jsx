@@ -37,7 +37,7 @@ export default function Profile({ user, logout }) {
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
             {/* My Orders ক্লিক করলে Buy Fuel পেজে নিয়ে যাবে */}
-            <Link to="/buy" className="btn btn-ghost btn-block">My Orders</Link>
+            <Link to="/cart" className="btn btn-ghost btn-block">My Orders</Link>
 
             {/* Seller Dashboard ক্লিক করলে Sell Fuel পেজে নিয়ে যাবে */}
             <Link to="/sell" className="btn btn-ghost btn-block">Seller Dashboard</Link>

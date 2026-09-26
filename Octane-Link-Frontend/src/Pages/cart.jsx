@@ -28,13 +28,16 @@ function Cart({ cart, removeFromCart, increaseQuantity, decreaseQuantity }) {
                             <h3>{product.name}</h3>
                             <p>৳{product.price}</p>
                             <p>Quantity:{product.quantity}</p>
-                            <button onClick={() => removeFromCart(product._id)}>
+                            <button onClick={() => removeFromCart(product._id)}
+                                 className="sell-fuel-button">
                                 Remove
                             </button>
-                            <button onClick={() => increaseQuantity(product._id)}>
+                            <button onClick={() => increaseQuantity(product._id)}
+                                 className="sell-fuel-button">
                                 +
                             </button>
-                            <button onClick={() => decreaseQuantity(product._id)}>
+                            <button onClick={() => decreaseQuantity(product._id)}
+                                className="sell-fuel-button">
                                 -
                             </button>
                         </div>
