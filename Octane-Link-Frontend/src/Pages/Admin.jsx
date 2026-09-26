@@ -154,7 +154,7 @@ const response = await fetch(url, {
   });
 };
 
-  const handleDelete = async (id) => {
+const handleDelete = async (id) => {
   const confirmDelete = window.confirm(
     "Are you sure you want to delete this product?"
   );
@@ -164,10 +164,15 @@ const response = await fetch(url, {
   }
 
   try {
+    const token = localStorage.getItem("octane_token");
+
     const response = await fetch(
       `http://localhost:5000/api/products/${id}`,
       {
         method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       }
     );
 

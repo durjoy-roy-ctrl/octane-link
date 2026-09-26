@@ -126,22 +126,26 @@ async function forgotPassword(req, res) {
     const token = crypto.randomBytes(20).toString('hex')
 
     user.resetToken = token
-    user.resetTokenExpire = Date.now() + 3600000
+    user.resetTokenExpire = Date.now() + 3600000 // 1 hr validity
 
     await user.save()
 
+    // tls অপশন যোগ করা হয়েছে SSL Certificate issue বাইপাস করার জন্য
     const transporter = nodemailer.createTransport({
       service: 'gmail',
       auth: {
-        user: 'durjoyroy735@gmail.com',
-        pass: 'mvws vuxq zjgg ukba',
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS,
       },
+      tls: {
+        rejectUnauthorized: false
+      }
     })
 
     const resetUrl = `http://localhost:5173/reset-password/${token}`
 
     await transporter.sendMail({
-      from: '"OctaneLink Support" <YOUR_GMAIL@gmail.com>',
+      from: `"OctaneLink Support" <${process.env.EMAIL_USER}>`,
       to: user.email,
       subject: 'Password Reset Request',
       html: `

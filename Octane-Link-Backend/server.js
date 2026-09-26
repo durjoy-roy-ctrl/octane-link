@@ -9,7 +9,6 @@ const cartRoutes = require('./routes/cartRoutes')
 const orderRoutes = require('./routes/orderRoutes')
 const upload = require('./middleware/multer.middleware')
 const cloudinary = require('./config/cloudinary')
-const orderRoutes = require('./routes/orderRoutes')
 
 const app = express()
 

@@ -266,16 +266,18 @@ function App() {
           {/* Product Cart */}
 
           <Route
-            path="/cart"
-            element={
-              <Cart
-                cart={cart}
-                removeFromCart={removeFromCart}
-                increaseQuantity={increaseQuantity}
-                decreaseQuantity={decreaseQuantity}
-              />
-            }
-          />
+  path="/cart"
+  element={
+    localStorage.getItem("octane_user")
+      ? <Cart
+          cart={cart}
+          removeFromCart={removeFromCart}
+          increaseQuantity={increaseQuantity}
+          decreaseQuantity={decreaseQuantity}
+        />
+      : <Navigate to="/login" />
+  }
+/>
 
           {/* Admin */}
 

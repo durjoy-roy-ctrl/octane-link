@@ -154,7 +154,7 @@ async function updateProduct(req, res) {
 
     let imageData = product.image
 
-    // If a new image was uploaded
+    // If a new image is uploaded
     if (req.file) {
 
       // Delete old image from Cloudinary
