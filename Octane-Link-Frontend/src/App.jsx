@@ -33,33 +33,9 @@ function App() {
   const [cart, setCart] = useState([]);
 
   async function addToCart(product) {
-    const token = localStorage.getItem("octane_token");
-
-    const response = await fetch("http://localhost:5000/api/cart", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${token}`
-      },
-      body: JSON.stringify({
-        productId: product._id,
-        quantity: 1
-      })
-    });
-
-    const data = await response.json();
-
-    console.log("Cart response:", data);
-
-    if (!response.ok) {
-      console.error("Failed to add product to cart:", data.message);
-      return;
-    }
-
+    // Local state immediate update (Fast UI update)
     setCart((prevCart) => {
-      const existing = prevCart.find(
-        (item) => item._id === product._id
-      );
+      const existing = prevCart.find((item) => item._id === product._id);
 
       if (existing) {
         return prevCart.map((item) =>
@@ -71,10 +47,42 @@ function App() {
 
       return [...prevCart, { ...product, quantity: 1 }];
     });
+
+    // Backend Sync if logged in
+    const token = localStorage.getItem("octane_token");
+    if (!token) return;
+
+    try {
+      const response = await fetch("http://localhost:5000/api/cart", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`
+        },
+        body: JSON.stringify({
+          productId: product._id,
+          quantity: 1
+        })
+      });
+
+      const data = await response.json();
+      console.log("Cart response:", data);
+
+      if (!response.ok) {
+        console.error("Failed to sync cart with backend:", data.message);
+      }
+    } catch (error) {
+      console.error("Add to cart API error:", error);
+    }
   }
 
   async function removeFromCart(productId) {
+    setCart((prevCart) =>
+      prevCart.filter((item) => item._id !== productId)
+    );
+
     const token = localStorage.getItem("octane_token");
+    if (!token) return;
 
     try {
       const response = await fetch(
@@ -90,19 +98,23 @@ function App() {
       if (!response.ok) {
         const data = await response.json();
         console.error("Failed to remove item:", data.message);
-        return;
       }
-
-      setCart((prevCart) =>
-        prevCart.filter((item) => item._id !== productId)
-      );
     } catch (error) {
       console.error("Remove from cart error:", error);
     }
   }
 
   async function updateQuantity(productId, newQuantity) {
+    setCart((prevCart) =>
+      prevCart.map((item) =>
+        item._id === productId
+          ? { ...item, quantity: newQuantity }
+          : item
+      )
+    );
+
     const token = localStorage.getItem("octane_token");
+    if (!token) return;
 
     try {
       const response = await fetch(
@@ -122,25 +134,14 @@ function App() {
       if (!response.ok) {
         const data = await response.json();
         console.error("Failed to update quantity:", data.message);
-        return;
       }
-
-      setCart((prevCart) =>
-        prevCart.map((item) =>
-          item._id === productId
-            ? { ...item, quantity: newQuantity }
-            : item
-        )
-      );
     } catch (error) {
       console.error("Update quantity error:", error);
     }
   }
 
   function increaseQuantity(productId) {
-    const item = cart.find(
-      (item) => item._id === productId
-    );
+    const item = cart.find((item) => item._id === productId);
 
     if (!item) return;
 
@@ -148,9 +149,7 @@ function App() {
   }
 
   function decreaseQuantity(productId) {
-    const item = cart.find(
-      (item) => item._id === productId
-    );
+    const item = cart.find((item) => item._id === productId);
 
     if (!item) return;
 
@@ -166,7 +165,11 @@ function App() {
     const savedUser = localStorage.getItem("octane_user");
 
     if (savedUser) {
-      setUser(JSON.parse(savedUser));
+      try {
+        setUser(JSON.parse(savedUser));
+      } catch (err) {
+        console.error("Error parsing saved user", err);
+      }
     }
 
     const timer = setTimeout(() => {
@@ -176,12 +179,11 @@ function App() {
     return () => clearTimeout(timer);
   }, []);
 
-  // Load user's cart from backend
+  // Load user's cart from backend safely
   useEffect(() => {
     if (!user) return;
 
     const token = localStorage.getItem("octane_token");
-
     if (!token) return;
 
     fetch("http://localhost:5000/api/cart", {
@@ -193,10 +195,15 @@ function App() {
       .then((data) => {
         console.log("Cart from backend:", data);
 
-        const formattedCart = data.items.map((item) => ({
-          ...item.product,
-          quantity: item.quantity
-        }));
+        // Safe extraction for flexible backend data formats
+        const itemsArray = data.items || (data.cart && data.cart.items) || [];
+
+        const formattedCart = itemsArray
+          .filter((item) => item && item.product)
+          .map((item) => ({
+            ...item.product,
+            quantity: item.quantity
+          }));
 
         setCart(formattedCart);
       })
@@ -209,7 +216,7 @@ function App() {
   function login(userData, token) {
     setUser(userData);
 
-    localStorage.setItem(
+    localStorage.getItem(
       "octane_user",
       JSON.stringify(userData)
     );
@@ -222,6 +229,7 @@ function App() {
   // Logout function
   function logout() {
     setUser(null);
+    setCart([]);
     localStorage.removeItem("octane_user");
     localStorage.removeItem("octane_token");
   }
@@ -285,9 +293,9 @@ function App() {
             path="/admin"
             element={
               localStorage.getItem("octane_user") &&
-              JSON.parse(
-                localStorage.getItem("octane_user")
-              ).role === "admin"
+                JSON.parse(
+                  localStorage.getItem("octane_user")
+                ).role === "admin"
                 ? <Admin />
                 : <Navigate to="/" />
             }
@@ -314,7 +322,7 @@ function App() {
 
           <Route
             path="/buy"
-            element={<Buy />}
+            element={<Buy addToCart={addToCart} />}
           />
 
           <Route
