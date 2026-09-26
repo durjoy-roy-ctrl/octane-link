@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import CarbonFootprintDisplay from "./CarbonFootprintDisplay";
 
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
@@ -43,8 +44,8 @@ function App() {
       await fetch("http://localhost:5000/api/cart", {
         method: "DELETE",
         headers: {
-          "Authorization": `Bearer ${token}`
-        }
+          Authorization: `Bearer ${token}`,
+        },
       });
     } catch (error) {
       console.error("Clear cart error:", error);
@@ -60,7 +61,7 @@ function App() {
         return prevCart.map((item) =>
           item._id === product._id
             ? { ...item, quantity: item.quantity + 1 }
-            : item
+            : item,
         );
       }
 
@@ -76,12 +77,12 @@ function App() {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${token}`
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({
           productId: product._id,
-          quantity: 1
-        })
+          quantity: 1,
+        }),
       });
 
       const data = await response.json();
@@ -96,9 +97,7 @@ function App() {
   }
 
   async function removeFromCart(productId) {
-    setCart((prevCart) =>
-      prevCart.filter((item) => item._id !== productId)
-    );
+    setCart((prevCart) => prevCart.filter((item) => item._id !== productId));
 
     const token = localStorage.getItem("octane_token");
     if (!token) return;
@@ -109,9 +108,9 @@ function App() {
         {
           method: "DELETE",
           headers: {
-            "Authorization": `Bearer ${token}`
-          }
-        }
+            Authorization: `Bearer ${token}`,
+          },
+        },
       );
 
       if (!response.ok) {
@@ -126,10 +125,8 @@ function App() {
   async function updateQuantity(productId, newQuantity) {
     setCart((prevCart) =>
       prevCart.map((item) =>
-        item._id === productId
-          ? { ...item, quantity: newQuantity }
-          : item
-      )
+        item._id === productId ? { ...item, quantity: newQuantity } : item,
+      ),
     );
 
     const token = localStorage.getItem("octane_token");
@@ -142,12 +139,12 @@ function App() {
           method: "PATCH",
           headers: {
             "Content-Type": "application/json",
-            "Authorization": `Bearer ${token}`
+            Authorization: `Bearer ${token}`,
           },
           body: JSON.stringify({
-            quantity: newQuantity
-          })
-        }
+            quantity: newQuantity,
+          }),
+        },
       );
 
       if (!response.ok) {
@@ -207,8 +204,8 @@ function App() {
 
     fetch("http://localhost:5000/api/cart", {
       headers: {
-        "Authorization": `Bearer ${token}`
-      }
+        Authorization: `Bearer ${token}`,
+      },
     })
       .then((response) => response.json())
       .then((data) => {
@@ -221,7 +218,7 @@ function App() {
           .filter((item) => item && item.product)
           .map((item) => ({
             ...item.product,
-            quantity: item.quantity
+            quantity: item.quantity,
           }));
 
         setCart(formattedCart);
@@ -235,10 +232,7 @@ function App() {
   function login(userData, token) {
     setUser(userData);
 
-    localStorage.setItem(
-      "octane_user",
-      JSON.stringify(userData)
-    );
+    localStorage.setItem("octane_user", JSON.stringify(userData));
 
     localStorage.setItem("octane_token", token);
 
@@ -253,6 +247,10 @@ function App() {
     localStorage.removeItem("octane_token");
   }
 
+  const isLoggedIn = !!user;
+
+  const isAdmin = user?.role === "admin";
+
   if (showSplash) {
     return <SplashScreen />;
   }
@@ -260,34 +258,23 @@ function App() {
   return (
     <BrowserRouter>
       <div className="page">
-
         <Navbar
           user={user}
-          cartCount={cart.reduce(
-            (total, item) => total + item.quantity,
-            0
-          )}
+          cartCount={cart.reduce((total, item) => total + item.quantity, 0)}
         />
 
         <Routes>
-
           <Route path="/" element={<Home />} />
 
           {/* About & Profile */}
 
           <Route
             path="/about"
-            element={<About />}
+            element={isAdmin ? <Navigate to="/" /> : <About />}
           />
-
           <Route
             path="/profile"
-            element={
-              <Profile
-                user={user}
-                logout={logout}
-              />
-            }
+            element={<Profile user={user} logout={logout} />}
           />
 
           {/* Product Cart */}
@@ -295,14 +282,19 @@ function App() {
           <Route
             path="/cart"
             element={
-              localStorage.getItem("octane_user")
-                ? <Cart
+              !isLoggedIn ? (
+                <Navigate to="/login" />
+              ) : isAdmin ? (
+                <Navigate to="/" />
+              ) : (
+                <Cart
                   cart={cart}
                   removeFromCart={removeFromCart}
                   increaseQuantity={increaseQuantity}
                   decreaseQuantity={decreaseQuantity}
+                  updateQuantity={updateQuantity}
                 />
-                : <Navigate to="/login" />
+              )
             }
           />
 
@@ -310,113 +302,89 @@ function App() {
 
           <Route
             path="/admin"
-            element={
-              localStorage.getItem("octane_user") &&
-                JSON.parse(
-                  localStorage.getItem("octane_user")
-                ).role === "admin"
-                ? <Admin />
-                : <Navigate to="/" />
-            }
+            element={isAdmin ? <Admin /> : <Navigate to="/" />}
           />
 
           {/* Product catalog */}
 
           <Route
             path="/catalog"
-            element={
-              <ProductCatalog
-                addToCart={addToCart}
-                user={user}
-              />
-            }
+            element={<ProductCatalog addToCart={addToCart} user={user} />}
           />
 
-          <Route
-            path="/product/:id"
-            element={<ProductDetails />}
-          />
+          <Route path="/product/:id" element={<ProductDetails />} />
 
           {/* Main fuel routes */}
 
           <Route
             path="/buy"
-            element={<Buy addToCart={addToCart} />}
+            element={
+              isAdmin ? <Navigate to="/" /> : <Buy addToCart={addToCart} />
+            }
           />
 
           <Route
             path="/sell"
-            element={<Checkout cart={cart} />}
+            element={isAdmin ? <Navigate to="/" /> : <Checkout cart={cart} />}
           />
 
           <Route
             path="/bulk-quote"
-            element={<BulkQuote />}
+            element={isAdmin ? <Navigate to="/" /> : <BulkQuote />}
           />
 
           <Route
             path="/checkout"
-            element={<Checkout cart={cart} clearCart={clearCart} />}
+            element={
+              isAdmin ? (
+                <Navigate to="/" />
+              ) : (
+                <Checkout cart={cart} clearCart={clearCart} />
+              )
+            }
           />
 
           <Route
             path="/invoice"
-            element={<Invoice clearCart={clearCart} />}
+            element={
+              isAdmin ? <Navigate to="/" /> : <Invoice clearCart={clearCart} />
+            }
           />
 
           {/* Authentication */}
 
           <Route
             path="/signup"
-            element={
-              <Signup
-                login={login}
-                user={user}
-              />
-            }
+            element={<Signup login={login} user={user} />}
           />
 
-          <Route
-            path="/login"
-            element={
-              <Login
-                login={login}
-                user={user}
-              />
-            }
-          />
+          <Route path="/login" element={<Login login={login} user={user} />} />
 
-          <Route
-            path="/forgot-password"
-            element={<ForgotPassword />}
-          />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
 
-          <Route
-            path="/reset-password/:token"
-            element={<ResetPassword />}
-          />
+          <Route path="/reset-password/:token" element={<ResetPassword />} />
 
           {/* Delivery system */}
 
           <Route
             path="/delivery"
-            element={<Delivery />}
+            element={isAdmin ? <Navigate to="/" /> : <Delivery />}
           />
 
           <Route
             path="/delivery/track"
-            element={<DeliveryTracking />}
+            element={isAdmin ? <Navigate to="/" /> : <DeliveryTracking />}
           />
 
           <Route
             path="/delivery/schedule"
-            element={<DeliverySchedule />}
+            element={isAdmin ? <Navigate to="/" /> : <DeliverySchedule />}
           />
-
         </Routes>
 
         <Footer />
 
+        <CarbonFootprintDisplay />
       </div>
     </BrowserRouter>
   );
